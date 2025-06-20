@@ -1,0 +1,21 @@
+# Importing pygame
+import pygame
+import Game from game.py
+
+
+def main():
+    # Initialize pygame -- this is required for rendering fonts
+    pygame.init()
+    
+    # Create the window and set its size to 500 width and 400 height
+    width = 500
+    height = 400
+    size = (width, height)
+    screen = pygame.display.set_mode(size)
+    
+    # Set the title of the window
+    pygame.display.set_caption("Painting")
+    game = Game(screen)
+    
+    # Start the game
+    game.play()  
