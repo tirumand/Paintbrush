@@ -1,0 +1,102 @@
+class Game:
+    # Initialize the screen, the paintbrush and the frames    
+    def __init__(self, screen):
+        self.screen = screen
+        self.bg_color = pygame.Color('black')
+        self.close_clicked = False
+        self.continue_game = True
+        
+        self.default_color = 'red'
+        paint_x = 245
+        paint_y = 195
+        paint_height = 10
+        paint_width = 10
+        paint_velocity = [0, 0]
+        self.paint = Paintbrush(paint_x, paint_y, paint_width, paint_height, self.default_color, self.screen)        
+
+    # Play the game until the player presses the close box.
+    def play(self):
+        while not self.close_clicked:  
+            self.handle_events()
+            self.draw()    
+            self.paintbrush_moving()
+            
+    # Checks if the user pressed close box or not
+    # Checks if the user pressed b, r, y, g or spacebar
+    def handle_events(self):
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                self.close_clicked = True
+            if event.type == pygame.KEYDOWN:
+                self.paintbrush_color(event)            
+    
+    # Moves the paintbrush by 1 pixel according to the key the player presses 
+    def paintbrush_moving(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            self.paint.moveUp(1)
+        if keys[pygame.K_DOWN]:
+            self.paint.moveDown(1)
+        if keys[pygame.K_RIGHT]:
+            self.paint.moveRight(1)
+        if keys[pygame.K_LEFT]:
+            self.paint.moveLeft(1) 
+    
+    # Changes the color of the paintbrush according to the key the player presses
+    def paintbrush_color(self, event):
+        if event.key == pygame.K_b:
+            self.paint.set_color('blue')
+        if event.key == pygame.K_g:
+            self.paint.set_color('green')
+        if event.key == pygame.K_y:
+            self.paint.set_color('yellow')
+        if event.key == pygame.K_SPACE:
+            self.paint.set_color('black') 
+        if event.key == pygame.K_r:
+            self.paint.set_color('red')
+    
+    # Draws all the game objects to screen and updates full display       
+    def draw(self):
+        self.paint.draw()
+        pygame.display.flip() 
+
+
+class Paintbrush:
+    # Initializes the paintbrush's attributes
+    def __init__(self, x, y, width, height, brush_color, screen):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = pygame.Color(brush_color)
+        self.screen = screen
+    
+    # Moves the brush up by a certian number of pixels
+    def moveUp(self, pixels):
+        self.rect.y -= pixels
+        if self.rect.y < 0:
+            self.rect.y = 0 
+    
+    # Moves the brush down by a certian number of pixels
+    def moveDown(self, pixels):
+        self.rect.y += pixels
+        if self.rect.y > 390:
+            self.rect.y = 390
+    
+    # Moves the brush right by a certian number of pixels
+    def moveRight(self, pixels):
+        self.rect.x += pixels
+        if self.rect.x > 490:
+            self.rect.x = 490
+    
+    # Moves the brush left by a certian number of pixels
+    def moveLeft(self, pixels):
+        self.rect.x -= pixels
+        if self.rect.x < 0:
+            self.rect.x = 0   
+    
+    # Sets the color of the paintbrush
+    def set_color(self, color):
+        self.color = pygame.Color(color)
+    
+    # Draws the paintbrush  
+    def draw(self):
+        pygame.draw.rect(self.screen, self.color, self.rect)
